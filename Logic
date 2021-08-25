@@ -1,0 +1,140 @@
+	call chisqtest(x,y,ci,prob)		*prob = probability values						
+			*y = Null default						
+			*ci default value is .95						
+Data Transformation									
+	x should be as a data frame or matrix or as vector, otherwise 								
+	promt Error: "Observations should be a dataframe or matrix or a vector								
+									
+									
+	When x and y are both given								
+	If length of x and y is not of equal length,								
+	Stop and promt Error: " "x" and "y" should be of equal length"								
+									
+1	If "x" and "y" are negative 								
+	promt Error "All "x" and "y" entries should be positive and definite" and stop								
+	otherwise continue to 2								
+									
+2	If "x" and "y" are < 5								
+	promt Warning message: "Cell frequency should be > 5 otherwise Chi sq approximation may be incorrect"								
+	and continue to 3								
+									
+3	Remove incomplete observations and define the complete variable as "x"								
+	x = complete cases of observations								
+									
+	x = create a table of x and y								
+		For Eg: if x=c(10,25,15,30,14,27,25,15), y=c(25,10,36,52,25,74,10,36)							
+		Create table as below'							
+					y				
+					10	25	36	52	74
+			x	10	0	1	0	0	0
+				14	0	1	0	0	0
+	x = 			15	0	0	2	0	0
+				25	2	0	0	0	0
+				27	0	0	0	0	1
+ 				30	0	0	0	1	0
+									
+									
+									
+									
+									
+	If only "x" and "y"  are given continue to METHOD 1								
+	If "x" and "y" and "prob" values are given, then continue to METHOD 2								
+									
+METHOD 1	Pearson's Chi Square Test								
+									
+	Define confidence interval as variable "ci"								
+									
+	Convert variable "x" as factor								
+									
+	Compute length of rows as variable "nr"								
+	 	nr =row length of "x"							
+		"nr" must be >= 2  							
+		otherwise "error"							
+									
+	Compute length of column and save it as variable "nc"								
+		nc = column length of "x"							
+		"nc" must be >= 2 							
+		otherwise "error"							
+									
+	Compute sum of row as variable "sr"								
+		sr = sum of rows values of "x"							
+									
+	Compute sum of column as variable "sc"								
+		sc = sum of columns values  of "x"							
+									
+	Obtain grand total as variable "gt"								
+		gt = sum of "x"							
+									
+	Compute expected values as variable "expc"								
+		expc = (sr * sc) / gt							
+									
+	Compute Chi Sq Statistics as variable "Statistic"								
+		Statistic = sum ( ( x - expc ) ^2) / expc							
+									
+	Compute Degrees of Freedom as variable "df"								
+		df = (nr - 1) * (nc - 1)							
+									
+	Compute ChiSq. critical value as variable "Chisq. Critival Val"								
+		Chisq. Critical Val = table value of chi square with df and ci							
+									
+	Compute p-value as variable "p-value"								
+		p-value = pvalue from the table with corresponding df							
+									
+4	Inference 								
+	If Chi square value is > Chisq. Critical Val then we reject the Null Hypothesis								
+		and conclude that there is association between the variables							
+									
+		otherwise accept the Null Hypothesis							
+									
+	call chisqtest()								
+	"Function Output (""Pearson's Chis Square Test""
+X Squared = Statistic, Chi Square Critical Value = chisq. Critical Val, df, p-value
+There is association between the variables/There is no association between the variables)"								
+									
+METHOD 2	Pearson's Chi Square Test with Probabilities								
+									
+									
+									
+2.1	If length of x is not equal to p								
+	Stop and promt Error:  " "x" and probability values should be of equal lengths"								
+									
+2.2	If p < 0								
+	Stop and promt Error: "Probabilities value cannot be negative"								
+									
+2.3	If sum of p is not equal to 1								
+	Stop and promt Error: "Sum of probabilities value should be equal to 1"								
+									
+	If sum of p > 1								
+	Stop and promt Error: "Sum of probabilities should not exceed 1"								
+									
+	If  2.1, 2.2, and 2.3 are satisfied go to step 2.4								
+									
+2.4	Compute 								
+	n = sum of x								
+									
+	Compute Expected Value								
+  	E = n * p	
+		
+	If any values of  E < 5	
+	Promt Warning Message: "Chi Square Approximation may be incorrect"	
+	and continue to 2.5	
+		
+2.5	Compute Chi Sq Statistics as variable "Statistic"	
+		Statistic = sum ( ( x - E ) ^2) / E
+		
+	Compute Degrees of Freedom as variable "df"	
+		df = length of (x) - 1
+		
+	Compute ChiSq. critical value as variable "Chisq. Critival Val"	
+		Chisq. Critical Val = table value of chi square with df and ci
+		
+	Compute p-value as variable "p-value"	
+		p-value = pvalue from the table with corresponding df
+		
+	Inference 	
+	If Chi square value is > Chisq. Critical Val then we reject the Null Hypothesis	
+		otherwise accept the Null Hypothesis
+		
+	call chisqtest()	
+	"Function Output (""Pearson's Chis Square Test with given Probabilities""
+X-squared, Chi Square Critical Value, df, p-value)"	
